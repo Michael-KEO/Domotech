@@ -10,11 +10,24 @@ function drawEnergyChart() {
         datasets: [{
           label: 'kWh',
           data: hist.map(e=>e.usage.toFixed(2)),
-          backgroundColor: hist.map(e=>
-            e.usage < 1.5? '#4ade80'
-            : e.usage > 1.5? '#a9d545' 
-            : '#c1df59'
-          ),
+          backgroundColor: hist.map(e => {
+            const usage = e.usage;
+            if (usage <= 0) return '#4ade80'; // vert
+            if (usage >= 2) return '#fde047'; // orange
+          
+            // Interpolation linéaire entre vert (#4ade80) et orange (#fde047)
+            const interpolate = (start, end, t) => Math.round(start + (end - start) * t);
+          
+            const hexToRgb = hex => hex.match(/\w\w/g).map(x => parseInt(x, 16));
+            const rgbToHex = rgb => '#' + rgb.map(x => x.toString(16).padStart(2, '0')).join('');
+          
+            const t = usage / 2; // normalise usage entre 0 et 1
+            const startRgb = hexToRgb('4ade80');
+            const endRgb = hexToRgb('fde047');
+            const interpRgb = startRgb.map((start, i) => interpolate(start, endRgb[i], t));
+          
+            return rgbToHex(interpRgb);
+          }),
           borderRadius:5,
           barPercentage:0.92,
           categoryPercentage:0.85
