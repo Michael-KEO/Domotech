@@ -12,7 +12,7 @@ function drawEnergyChart() {
           data: hist.map(e=>e.usage.toFixed(2)),
           backgroundColor: hist.map(e=>
             e.usage < 1.5? '#4ade80'
-            : e.usage > 1.5? '#c1df59' 
+            : e.usage > 1.5? '#a9d545' 
             : '#c1df59'
           ),
           borderRadius:5,
