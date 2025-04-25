@@ -1,0 +1,147 @@
+/* Base */
+body { 
+    font-family: 'Inter', Arial, sans-serif; 
+    background: #f8fafc; 
+  }
+  
+/* Animations */
+.fade-in { 
+  animation: fadeIn 0.3s; 
+}
+
+@keyframes fadeIn { 
+  from { opacity: 0; transform: translateY(0px);} 
+  to { opacity: 1; transform: translateY(0);} 
+}
+
+/* Navigation */
+.active-tab { 
+  color: #3b82f6 !important; 
+  border-bottom: 2px solid #3b82f6; 
+}
+
+/* Utils */
+::-webkit-scrollbar { 
+  display: none; 
+}
+
+/* Toggle Switches */
+.custom-toggle {
+  user-select: none;
+  position: relative;
+  display: inline-block;
+}
+
+.custom-toggle .bg {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #d1d5db; /* Couleur de fond par défaut (gray-300) */
+  border-radius: 9999px;
+  transition: background-color 0.2s;
+}
+
+.custom-toggle .dot {
+  position: absolute;
+  left: 0.25rem; /* Petit espace à gauche */
+  top: 0.25rem;
+  width: 1rem; /* Taille du dot */
+  height: 1rem;
+  background-color: white;
+  border-radius: 9999px;
+  transition: transform 0.2s, background-color 0.2s;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.custom-toggle input:checked + .bg {
+  background-color: #cef6dc; /* Couleur de fond quand activé (emerald-100) */
+}
+
+.custom-toggle input:checked ~ .dot {
+  transform: translateX(1rem); /* Déplacement du dot */
+  background-color: #5bd3ab; /* Couleur du dot quand activé (emerald-500) */
+}
+
+.custom-toggle input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+
+/* Tooltips */
+.tooltip { 
+  position: relative; 
+  display: inline-block; 
+  cursor: pointer; 
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 150px;
+  background-color: rgba(55,65,81,0.95);
+  color: #fff;
+  text-align: center;
+  border-radius: 5px;
+  padding: 7px 10px;
+  position: absolute;
+  z-index: 10;
+  bottom: 125%; 
+  left: 50%; 
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.4s;
+  font-size: 0.87rem;
+}
+
+.tooltip:hover .tooltiptext { 
+  visibility: visible; 
+  opacity: 1; 
+}
+
+/* Assistant */
+.ai-avatar {
+  background: linear-gradient(135deg, #60a5fa, #a7f3d0 90%);
+  box-shadow: 0 2px 8px rgba(16,185,129,0.14);
+}
+
+/* Dashboard cards */
+.dashboard-card {
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Chart containers */
+.chart-container {
+  position: relative;
+  width: 100%;
+}
+
+/* Notifications */
+.notification {
+  transition: opacity 0.5s ease-out;
+  display: flex;
+  flex-direction: column; /* assure un empilement */
+  align-items: center;    /* recentre horizontalement */
+  justify-content: flex-end; /* ou center selon ton besoin */
+
+}
+
+/* Media queries */
+@media (min-width: 768px) {
+  .main-content {
+    margin-bottom: 2rem;
+  }
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+}

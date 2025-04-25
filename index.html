@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, maximum-scale=1.0, user-scalable=no">
+  <title> Domotech Smart Home Dashboard Mobile - POC</title>
+  <meta name="description" content="Tableau de bord de Domotech, multi-pages, design moderne, fonctionnalités avancées">
+  <!-- Tailwind 2.2.19 via jsDelivr -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <!-- Chart.js 4.4.3 -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  <!-- Font Awesome 6.5.2 -->
+  <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" rel="stylesheet">
+  <!-- Google Fonts: Inter -->
+  <link href="https://cdn.jsdelivr.net/npm/@fontsource/inter@3.3.1/400.css" rel="stylesheet">
+  <!-- CSS personnalisé -->
+  <link href="styles.css" rel="stylesheet">
+  <!-- Favicon -->
+  <link rel="icon" href="logo.png" type="image/x-icon">
+</head>
+<body class="bg-gray-50 text-gray-900 max-w-md mx-auto pb-4 select-none print:bg-white initial-fade-in">
+
+<!-- Mobile Header -->
+<header id="main-header" class="flex justify-between items-center px-4 py-3 bg-white shadow-sm sticky top-0 z-20 print:static print:shadow-none">
+  <span class="font-semibold text-lg tracking-tight">Domotech</span>
+  <button id="menu-btn" class="lg:hidden text-gray-500 focus:outline-none px-2" aria-label="Ouvrir le menu">
+    <i class="fas fa-bars fa-lg"></i>
+  </button>
+</header>
+
+<!-- Mobile Nav (Bottom) -->
+<nav id="nav-bar" class="fixed bottom-0 left-0 right-0 bg-white border-t flex justify-around py-2 z-30 max-w-md mx-auto print:hidden">
+  <button class="flex flex-col items-center focus:outline-none nav-btn" data-page="dashboard"><i class="fas fa-th-large text-lg"></i><span class="text-xs">Dashboard</span></button>
+  <button class="flex flex-col items-center focus:outline-none nav-btn" data-page="devices"><i class="fas fa-sliders-h text-lg"></i><span class="text-xs">Appareils</span></button>
+  <button class="flex flex-col items-center focus:outline-none nav-btn" data-page="automation"><i class="fas fa-robot text-lg"></i><span class="text-xs">Auto</span></button>
+  <button class="flex flex-col items-center focus:outline-none nav-btn" data-page="energy"><i class="fas fa-bolt text-lg"></i><span class="text-xs">Énergie</span></button>
+  <button class="flex flex-col items-center focus:outline-none nav-btn" data-page="settings"><i class="fas fa-cog text-lg"></i><span class="text-xs">Paramètres</span></button>
+</nav>
+
+<!-- Main Content -->
+<main id="root" class="mt-2 mb-16 px-2 print:mb-2"></main>
+
+
+<!-- Login Modal -->
+<div id="login-modal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50 fade-in print:hidden">
+  <div class="w-11/12 rounded-xl bg-white p-7 shadow-xl mx-auto max-w-xs relative">
+    <h2 class="text-xl mb-4 text-center font-bold text-blue-600">Bienvenue</h2>
+    <form id="login-form" autocomplete="off">
+      <label class="block mb-2 text-sm font-medium">Identifiant</label>
+      <input required id="login-user" type="text" class="block w-full rounded-lg border border-gray-200 p-2 mb-4 focus:border-blue-400" autofocus>
+      <label class="block mb-2 text-sm font-medium">Code PIN</label>
+      <input required id="login-pin" type="password" maxlength="6" class="block w-full rounded-lg border border-gray-200 p-2 mb-4 focus:border-blue-400">
+      <button type="submit" class="w-full py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors">Connexion</button>
+    </form>
+  </div>
+</div>
+
+<!-- Virtual Assistant Widget -->
+<div id="ai-widget" class="fixed right-4 bottom-20 z-40 print:hidden">
+  <button id="ai-btn" class="ai-avatar w-14 h-14 rounded-full flex items-center justify-center shadow-lg focus:outline-none border-4 border-white ring-2 ring-blue-400 animate-bounce">
+    <i class="fas fa-comment-dots fa-lg text-white"></i>
+  </button>
+</div>
+
+<!-- Assistant Modal -->
+<div id="ai-modal" class="fixed inset-0 flex items-end justify-center bg-black bg-opacity-30 z-50 hidden print:hidden">
+  <div class="bg-white rounded-t-xl w-full max-w-md pb-2 pt-4 px-4 shadow-xl fade-in">
+    <div class="flex items-center mb-2">
+      <div class="ai-avatar w-10 h-10 rounded-full flex items-center justify-center mr-3 text-2xl text-white text-shadow">
+        <i class="fas fa-robot"></i>
+      </div>
+      <span class="font-semibold text-blue-600">Assistant Virtuel</span>
+      <button id="close-ai" class="ml-auto text-gray-500 hover:text-red-400 focus:outline-none"><i class="fas fa-times"></i></button>
+    </div>
+    <div id="ai-chat" class="bg-gray-50 h-32 mb-2 p-2 rounded overflow-y-auto text-sm border"></div>
+    <form id="ai-form" class="flex">
+      <input id="ai-input" class="flex-1 border rounded-l px-2 py-1 focus:outline-none" type="text" placeholder="Votre question...">
+      <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 py-1 rounded-r" type="submit"><i class="fas fa-paper-plane"></i></button>
+    </form>
+    <div class="text-xs text-right mt-1"><button class="text-green-600 font-medium" id="ai-voice"><i class="fas fa-microphone"></i> Parler</button></div>
+  </div>
+</div>
+
+<!-- Templates pour composants d'IU -->
+<div id="templates" class="hidden">
+  <!-- Template pour le modal d'ajout d'automation -->
+  <div id="add-auto-modal-template">
+    <div id="add-auto-modal" class="fixed inset-0 z-40 bg-black bg-opacity-30 flex justify-center items-center hidden">
+      <div class="bg-white p-5 rounded-lg shadow-lg w-80">
+        <h3 class="font-semibold mb-2">Ajouter une règle</h3>
+        <form id="add-auto-form">
+          <input required placeholder="Si évènement (ex: présence détectée...)" class="w-full mb-2 border rounded px-2 py-1" id="auto-rule" maxlength="46"><br>
+          <input required placeholder="Action (ex: allumer salon...)" class="w-full mb-2 border rounded px-2 py-1" id="auto-action" maxlength="33"><br>
+          <button type="submit" class="bg-blue-500 text-white px-3 py-1 rounded mr-2">Ajouter</button>
+          <button type="button" id="cancel-auto-btn" class="text-gray-500 px-3 py-1 rounded">Annuler</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- JavaScript modules -->
+<script src="utils.js"></script>
+<script src="charts.js"></script>
+<script src="devices.js"></script>
+<script src="app.js"></script>
+
+</body>
+</html>
