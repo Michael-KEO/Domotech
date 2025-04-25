@@ -11,8 +11,8 @@ function drawEnergyChart() {
           label: 'kWh',
           data: hist.map(e=>e.usage.toFixed(2)),
           backgroundColor: hist.map(e=>
-            e.usage < 1 ? '#4ade80'
-            : e.usage > 1.3? '#ffa500' 
+            e.usage < 1.5? '#4ade80'
+            : e.usage > 1.5? '#ffa500' 
             : '#fde047'
           ),
           borderRadius:5,
