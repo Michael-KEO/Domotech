@@ -13,7 +13,7 @@ function drawEnergyChart() {
           backgroundColor: hist.map(e=>
             e.usage < 1.5? '#4ade80'
             : e.usage > 1.5? '#ffa500' 
-            : '#fde047'
+            : '#4ade80'
           ),
           borderRadius:5,
           barPercentage:0.92,
